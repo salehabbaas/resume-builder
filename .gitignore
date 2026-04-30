@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+
+# Local archives and generated bundles
+*.zip
+
+# Private resume history and exports
+old/
+
+# Personal profile data for the resume skill
+# Keep this file locally and use Resume_builder/skills/MY_INFO.template.md
+# as the public-safe structure.
+Resume_builder/skills/MY_INFO.md
+
+# Generated resume output folders inside the project
+Resume_builder/Resume_*/
+
+# Common temporary files
+*.tmp
+*.bak
+~$*
