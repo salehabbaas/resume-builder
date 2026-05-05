@@ -19,3 +19,7 @@ Resume_builder/Resume_*/
 *.tmp
 *.bak
 ~$*
+# Generated resume folders
+Resume_*/
+ZUHAIR_INFO.md
+Job Descriptions.txt
