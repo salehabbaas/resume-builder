@@ -12,8 +12,8 @@ An advanced AI resume-building skill for Codex. Drop in your data via `MY_INFO.m
 Invoke this skill with `$resume-builder` from any Codex workspace. Treat commands listed below, such as `/resume`, as task intents after the skill has been invoked; they are not required to be installed as Codex slash commands.
 
 Resolve all persistent files from these canonical locations, never relative to the current working directory or a global discovery symlink:
-- `SKILL_DIR`: `/Users/salehabbas/Library/Mobile Documents/com~apple~CloudDocs/Resumes/Resume_builder`.
-- `RESUMES_DIR`: `/Users/salehabbas/Library/Mobile Documents/com~apple~CloudDocs/Resumes`.
+- `SKILL_DIR`: `/Users/salehabbas/Developer/resume-builder` (the skill source repo; the installed Claude skill at `~/.claude/skills/resume-builder` is a symlink to it).
+- `RESUMES_DIR`: `/Users/salehabbas/Library/Mobile Documents/com~apple~CloudDocs/Resumes` (where every generated resume folder is written).
 - Read and update `SKILL_DIR/MY_INFO.md`, `SKILL_DIR/RESUME_STYLES.md`, and `SKILL_DIR/FEEDBACK.md` when applicable.
 - Write every generated `Resume_[JobTitle]_[Company]/` output folder under `RESUMES_DIR`, including when Codex is launched from another project.
 
@@ -208,7 +208,7 @@ Read `Target market` from MY_INFO.md. Apply the correct rules for every build.
 ### Location
 - Read all locations from `MY_INFO.md`. Never hardcode locations in this skill.
 - Use the exact location recorded per employer. If missing, ask the user.
-- Contact header: use current location from `MY_INFO.md → IDENTITY.Location`.
+- **Contact header city:** if `MY_INFO.md` defines a contact-city override rule (e.g., a `Resume city rule` that says to match the JD's city), follow it — extract the city from the JD during JD Analysis and use it in BOTH the resume and cover letter contact header, with the correct province/state abbreviation (Canada: ON, BC, AB, QC; US: NY, CA, TX, etc.). If the JD names no city, fall back to `MY_INFO.md → IDENTITY.Location`. If no override rule is defined, always use `MY_INFO.md → IDENTITY.Location`. Never ask — resolve it automatically.
 
 ### Section Order — ATS Optimized (Fixed)
 Research confirms this order maximizes ATS parsing and recruiter readability:
@@ -347,7 +347,7 @@ Available upon request.
 - Rewrite anything mechanical before finalizing.
 
 ### Years of Experience
-- Read maximum from MY_INFO.md. Never exceed it.
+- Read the `Max experience claim` cap from `MY_INFO.md → IDENTITY`. Never exceed it on any resume or cover letter, even for senior-level postings.
 - Use less when JD or domain focus makes it more accurate (3+, 4+, etc.).
 
 ### Line Formatting

@@ -15,7 +15,8 @@ Most resume tools are glorified templates. This skill is a full reasoning engine
 - **Employer block integrity** — no employer block ever splits across pages, guaranteed
 - **ATS scoring with risk level** — full score, matched keywords, missing keywords, suggested fixes, and a short recommendation
 - **Interactive Elicitation flow** — three structured choices (build mode, output mode, bullet style) before generation
-- **QA report on every build** — 11-point validation checklist returned before delivery; if anything fails, it regenerates automatically
+- **QA report on every build** — 14-point validation checklist returned before delivery; if anything fails, it regenerates automatically
+- **WHY.md decision doc** — every build ships a written rationale: which employers, certs, and projects were included and why
 - **Two output formats** — PDF (via ReportLab) and DOCX (via python-docx), always both, always matching
 
 ---
@@ -27,11 +28,14 @@ resume-builder/
 ├── SKILL.md           # All rules, commands, and workflows — the brain
 ├── RESUME_STYLES.md   # 6 named visual styles with colors, fonts, layout specs
 ├── MY_INFO.md         # Your personal data (gitignored — never committed)
+├── FEEDBACK.md        # Learning log from past builds (gitignored — kept local)
+├── agents/            # Agent definitions (e.g. openai.yaml) for cross-platform use
 ├── README.md          # This file
-└── .gitignore         # Excludes MY_INFO.md, built files, old folders
+├── AGENTS.md          # Project instructions for Codex / Cowork imports
+└── .gitignore         # Excludes MY_INFO.md, FEEDBACK.md, built files, output folders
 ```
 
-The three files work together. `SKILL.md` orchestrates everything. `MY_INFO.md` holds your data. `RESUME_STYLES.md` controls the design.
+The core files work together. `SKILL.md` orchestrates everything. `MY_INFO.md` holds your data. `RESUME_STYLES.md` controls the design. `FEEDBACK.md` accumulates lessons from past builds and is read at the start of every session.
 
 ---
 
@@ -41,14 +45,14 @@ The three files work together. `SKILL.md` orchestrates everything. `MY_INFO.md` 
 
 1. Clone or download this repo
 2. Create your own `MY_INFO.md` using the template below
-3. Zip the three files flat at the root — no subfolder:
+3. Zip the skill files flat at the root — no subfolder:
    ```bash
-   zip resume-builder.zip SKILL.md MY_INFO.md RESUME_STYLES.md
+   zip -r resume-builder.zip SKILL.md RESUME_STYLES.md MY_INFO.md agents/
    ```
 4. In Claude: **Settings → Skills → Import Skill** → upload the zip
 5. The skill appears as `resume-builder` and is ready
 
-> The zip must contain `SKILL.md` at the root level. Do not nest inside a subfolder.
+> The zip must contain `SKILL.md` at the root level. Do not nest inside a subfolder. `MY_INFO.md` is your private data — include it in your own zip, but it is gitignored and never committed to the repo.
 
 ### Option 2 — Use directly in any Claude session
 
@@ -75,6 +79,8 @@ description: Personal data for [Your Name] resume building.
 - **LinkedIn:** linkedin.com/in/[yourhandle]
 - **GitHub:** github.com/[yourhandle]
 - **Location:** [Your City, Province/State, Country]
+- **Resume city rule:** [Optional — e.g. "Always match the JD's city in the contact header." Omit to always use your home Location.]
+- **Max experience claim:** [Optional — e.g. "5+ years (hard cap)". The skill never exceeds this in any Summary or cover letter.]
 - **Languages:** [e.g. English (Native) | French (Conversational)]
 
 ## EDUCATION
@@ -171,20 +177,23 @@ Six named styles. Choose with `--style=<flag>`:
 
 ## What Gets Validated Before Delivery
 
-Every build returns an 11-point QA report. Nothing is delivered until all pass:
+Every build returns a 14-point QA report. Nothing is delivered until all pass:
 
 ```
-Resume PDF page count: 2 pages            [ PASS / FAIL ]
-DOCX spacing compact (single, 0-2pt):     [ PASS / FAIL ]
-Header rule absent (unless requested):    [ PASS / FAIL ]
-Employer blocks split across pages:       [ YES / NO    ]
-Education & Certifications split:         [ YES / NO    ]
-Certificates relevant to JD:             [ PASS / FAIL ]
-Required JD technologies with evidence:   [ PASS / FAIL ]
-Primary tech traceable in bullets:        [ PASS / FAIL / N/A ]
-No em dashes in any file:                 [ PASS / FAIL ]
-All 4 output files created:              [ PASS / FAIL ]
-Section order correct:                    [ PASS / FAIL ]
+Resume PDF page count: 2 pages             [ PASS / FAIL ]
+DOCX spacing compact (single, 0-2pt):      [ PASS / FAIL ]
+Header rule absent (unless requested):     [ PASS / FAIL ]
+Contact info in body (not header/footer):  [ PASS / FAIL ]
+Employer blocks split:                     [ YES / NO    ]
+Education & Certifications split:          [ YES / NO    ]
+Section headers never orphan from content: [ PASS / FAIL ]
+Certificates relevant to JD:               [ PASS / FAIL ]
+Required JD technologies with evidence:    [ PASS / FAIL ]
+Primary tech traceable in bullets:         [ PASS / FAIL / N/A ]
+No em dashes in any file:                  [ PASS / FAIL ]
+All 5 output files created:                [ PASS / FAIL ]
+Section order correct:                     [ PASS / FAIL ]
+Market rules applied (Canada/US):          [ PASS / FAIL ]
 ```
 
 ---
@@ -200,7 +209,7 @@ Section order correct:                    [ PASS / FAIL ]
 - **No unrelated certificates.** If the JD doesn't ask for it, leave it out.
 - **Languages line only when JD requires it.** Otherwise omit.
 - **ATS scoring** with matched, missing, risk level, and recommendation — unless user chose Just Generate.
-- **All 4 files always:** resume PDF + DOCX, cover letter PDF + DOCX.
+- **All 5 files always:** resume PDF + DOCX, cover letter PDF + DOCX, and WHY.md decision doc.
 
 ---
 
@@ -221,7 +230,7 @@ Section order correct:                    [ PASS / FAIL ]
 
 - LinkedIn: [linkedin.com/in/salehabbaas](https://linkedin.com/in/salehabbaas)
 - GitHub: [github.com/salehabbaas](https://github.com/salehabbaas)
-- Email: salehabbaas97@gmail.com
+- Email: abbas-sal@hotmail.com
 
 ---
 
