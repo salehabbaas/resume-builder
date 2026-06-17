@@ -32,60 +32,7 @@ At the start of every session read `MY_INFO.md`, `RESUME_STYLES.md`, and `FEEDBA
 
 ## FIRST-RUN SETUP
 
-**Trigger:** Run this flow when `MY_INFO.md` is empty, missing, or when the user explicitly says they are setting up for the first time.
-
-Ask the following questions using interactive controls when available, or concise chat questions otherwise. Each answer shapes the rest of the session.
-
-### Step 1 — Country
-> Which country are you applying in?
-- 🇨🇦 Canada
-- 🇺🇸 United States
-- Both (I apply in both)
-
-Store in MY_INFO.md as `Target market:`. This controls date format, spelling, reference norms, and language rules for every future build.
-
-### Step 2 — Province / State (if Canada selected)
-> Which province are you primarily applying in?
-- Ontario
-- British Columbia
-- Quebec
-- Alberta
-- Other
-
-If Quebec: ask "Do you want resumes in French, English, or bilingual (French + English)?"
-
-### Step 3 — Personal Info Collection
-Ask for the following. The user can skip any field:
-- Full name
-- Phone number
-- Email address
-- LinkedIn URL
-- GitHub URL (if applicable)
-- Portfolio or website URL (if applicable)
-- Current city and province/state
-- Languages spoken (with proficiency levels)
-
-### Step 4 — Existing Resume Upload
-> Do you have an existing resume to start from?
-- Yes — upload it and I will extract your experience, skills, and education automatically
-- No — I will guide you through entering your information
-
-**If yes:** Parse the uploaded resume (PDF or DOCX) and extract:
-- All work experience (employer, title, dates, location, bullets)
-- Education (degree, institution, dates)
-- Certifications
-- Skills
-- Projects (if present)
-
-Populate MY_INFO.md with the extracted data. Ask the user to confirm or correct each section before saving.
-
-### Step 5 — Work Experience
-If no resume was uploaded, collect work history interactively:
-- For each job: company name, job title (display title for resume), dates, location, key responsibilities and achievements, technologies used
-- Ask: "Is this job always relevant, or only for specific types of roles?"
-
-### Step 6 — Save Setup
-Write all collected data into MY_INFO.md using the standard format. Confirm with the user before saving.
+If `MY_INFO.md` is empty/missing, or the user runs `/setup`, read `reference/SETUP.md` and follow it. Otherwise skip this step entirely (do not load it on a normal build).
 
 ---
 
@@ -559,19 +506,7 @@ Market rules applied (Canada/US):          [ PASS / FAIL ]
 
 ## POWER VOCABULARY
 
-Rotate openers — never use the same one twice in one resume:
-
-Architected | Engineered | Delivered | Spearheaded | Overhauled | Accelerated | Streamlined | Designed | Implemented | Launched | Optimized | Automated | Reduced | Eliminated | Scaled | Standardized | Integrated | Deployed | Established | Drove | Built | Developed | Migrated | Modernized | Transformed | Enabled | Secured | Orchestrated | Championed | Consolidated | Shipped | Authored | Diagnosed | Resolved | Owned | Rolled out | Coordinated | Led | Partnered | Collaborated
-
-Impact phrases:
-- "...connecting X systems / hospitals / services"
-- "...serving X+ users across Y countries"
-- "...reducing turnaround from X to Y"
-- "...eliminating manual [process]"
-- "...enabling [team/users] to [outcome]"
-- "...cutting [X] by [Y]%"
-
-Avoid: "leveraged" | "utilized" | "in order to" | starting every bullet with "Used" (except OnePoints) | em dashes | semicolons as separators
+For opener variety and impact-phrase patterns, read `reference/POWER_VOCAB.md` while writing bullets. Quick rules to always apply: rotate openers (never repeat one in the same resume), and avoid "leveraged", "utilized", "in order to", em dashes, and semicolon separators.
 
 ---
 
@@ -587,20 +522,4 @@ Avoid: "leveraged" | "utilized" | "in order to" | starting every bullet with "Us
 
 ## ATS KEYWORD BANK
 
-**Backend / SWE:**
-REST API, microservices, backend development, system design, scalable systems, distributed systems, CI/CD, Git, code review, automated testing, GraphQL, API design, high availability, performance optimization, software delivery
-
-**Healthcare IT:**
-HL7, FHIR, Epic EHR, Rhapsody, Mirth Connect, DICOM, PACS, HIPAA, PHIPA, clinical data exchange, health informatics, healthcare integration, interoperability, EHR integration
-
-**Cloud & DevOps:**
-AWS, Amazon Web Services, Docker, Kubernetes, cloud-native, deployment pipeline, CI/CD, containerization, cloud architecture, auto-scaling
-
-**Data:**
-ETL, data pipelines, SQL, PostgreSQL, MySQL, Oracle, Microsoft SQL Server, Elasticsearch, Power BI, Pandas, Python, data engineering, real-time analytics, dashboards
-
-**Security:**
-ISO 27001, CEH, EDR, SIEM, WAF, incident response, penetration testing, vulnerability management, compliance, risk management
-
-**Leadership / Soft:**
-code review, mentorship, technical documentation, cross-functional collaboration, agile, Jira, solution design, release strategy, technical leadership, mentoring, team lead, cross-team coordination
+For domain keyword ideas during ATS scoring (Backend/SWE, Healthcare IT, Cloud/DevOps, Data, Security, Leadership), read `reference/ATS_KEYWORDS.md`. Always prefer the exact terms from the JD over any bank entry.

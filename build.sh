@@ -47,5 +47,10 @@ for p in claude codex; do
   tmp="$(mktemp)"; assemble "$p" > "$tmp"; emit "$p/SKILL.md" "$tmp"
   # RESUME_STYLES.md is shared verbatim
   tmp="$(mktemp)"; cat shared/RESUME_STYLES.md > "$tmp"; emit "$p/RESUME_STYLES.md" "$tmp"
+  # reference/*.md are shared verbatim (progressive-disclosure files read on demand)
+  mkdir -p "$p/reference"
+  for ref in shared/reference/*.md; do
+    tmp="$(mktemp)"; cat "$ref" > "$tmp"; emit "$p/reference/$(basename "$ref")" "$tmp"
+  done
 done
 exit $status
