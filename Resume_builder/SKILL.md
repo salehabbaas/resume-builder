@@ -5,7 +5,19 @@ description: AI-powered resume builder. Builds tailored, ATS-optimized resumes a
 
 # Resume Builder
 
-An advanced AI resume-building skill for Claude. Drop in your data via `MY_INFO.md`, paste a job description, and get a fully tailored, ATS-scored, two-page resume with cover letter in both PDF and DOCX — built to pass modern ATS systems in Canada and the US.
+An advanced AI resume-building skill for Codex. Drop in your data via `MY_INFO.md`, paste a job description, and get a fully tailored, ATS-scored, two-page resume with cover letter in both PDF and DOCX — built to pass modern ATS systems in Canada and the US.
+
+## CODEX PORTABILITY
+
+Invoke this skill with `$resume-builder` from any Codex workspace. Treat commands listed below, such as `/resume`, as task intents after the skill has been invoked; they are not required to be installed as Codex slash commands.
+
+Resolve all persistent files from these canonical locations, never relative to the current working directory or a global discovery symlink:
+- `SKILL_DIR`: `/Users/salehabbas/Library/Mobile Documents/com~apple~CloudDocs/Resumes/Resume_builder`.
+- `RESUMES_DIR`: `/Users/salehabbas/Library/Mobile Documents/com~apple~CloudDocs/Resumes`.
+- Read and update `SKILL_DIR/MY_INFO.md`, `SKILL_DIR/RESUME_STYLES.md`, and `SKILL_DIR/FEEDBACK.md` when applicable.
+- Write every generated `Resume_[JobTitle]_[Company]/` output folder under `RESUMES_DIR`, including when Codex is launched from another project.
+
+If the current Codex surface provides interactive controls, use them for setup choices. Otherwise ask the same questions concisely in chat and continue from the answers.
 
 At the start of every session read:
 - `MY_INFO.md` — personal data: identity, experience, certificates, projects
@@ -18,7 +30,7 @@ At the start of every session read:
 
 **Trigger:** Run this flow when `MY_INFO.md` is empty, missing, or when the user explicitly says they are setting up for the first time.
 
-Ask the following questions using Elicitation buttons in order. Each answer shapes the rest of the session.
+Ask the following questions using interactive controls when available, or concise chat questions otherwise. Each answer shapes the rest of the session.
 
 ### Step 1 — Country
 > Which country are you applying in?
@@ -77,7 +89,8 @@ Write all collected data into MY_INFO.md using the standard format. Confirm with
 
 1. Read `MY_INFO.md`, `RESUME_STYLES.md`, and `FEEDBACK.md` (if present).
 2. If no job description is provided: *"Please paste the full job description."*
-3. Run JD Analysis, then open the Elicitation build flow.
+3. When a JD is provided, save the exact JD text into `RESUMES_DIR` before generating anything.
+4. Run JD Analysis, then open the interactive build flow.
 
 ---
 
@@ -85,7 +98,7 @@ Write all collected data into MY_INFO.md using the standard format. Confirm with
 
 | Command | What it does |
 |---|---|
-| `/resume` | Full build — JD analysis, Elicitation flow, all output files in a named folder |
+| `/resume` | Full build — JD analysis, interactive flow, all output files in a named folder |
 | `/resume --style=<name>` | Build with a specific style: elegant \| navy \| teal \| executive \| purple \| mono |
 | `/resume --style=canada` | Force Canada-optimized formatting rules |
 | `/resume --style=us` | Force US-optimized formatting rules |
@@ -104,7 +117,7 @@ Write all collected data into MY_INFO.md using the standard format. Confirm with
 | `/add-project` | Add a project |
 | `/add-style` | Add a new visual style to RESUME_STYLES.md |
 | `/update-info` | Update any section of MY_INFO.md |
-| `/update-rules` | Propose a rule change — Claude shows diff and confirms before saving |
+| `/update-rules` | Propose a rule change — Codex shows diff and confirms before saving |
 | `/show-styles` | List all 6 visual styles |
 | `/show-certs` | List certs with role selection rules |
 | `/show-projects` | List projects with best-fit role tags |
@@ -112,6 +125,8 @@ Write all collected data into MY_INFO.md using the standard format. Confirm with
 ---
 
 ## JD ANALYSIS — BEFORE WRITING ANYTHING
+
+Before analysis, persist the raw JD text in the resume folder so the original posting is preserved alongside the build artifacts.
 
 Extract from the JD before generating:
 
@@ -133,7 +148,7 @@ Use this to decide what to include. Nothing enters the resume unless it connects
 
 ## ELICITATION FLOW — INTERACTIVE QUESTIONS
 
-Use Elicitation buttons whenever the platform supports it. Skip questions made unnecessary by earlier answers.
+Use interactive controls whenever the platform supports them. Skip questions made unnecessary by earlier answers.
 
 ### Step 1 — Build mode
 - **AutoResume** — generate automatically with minimal questions
@@ -187,7 +202,7 @@ Read `Target market` from MY_INFO.md. Apply the correct rules for every build.
 ### Identity & Files
 - **Name:** read from `MY_INFO.md → IDENTITY.Full Name`. First letter of each word capitalized. Never ALL CAPS.
 - **File name:** `Resume_[FirstName][LastName]_[JobTitle]_[Company].pdf` and `.docx`
-- **Output folder:** always create `Resume_[JobTitle]_[Company]/` in the Resumes folder. Place all 5 files inside: resume PDF, resume DOCX, cover letter PDF, cover letter DOCX, WHY.md. Never save to root.
+- **Output folder:** always create `Resume_[JobTitle]_[Company]/` under `RESUMES_DIR`, as defined in CODEX PORTABILITY. Place all 5 files inside: resume PDF, resume DOCX, cover letter PDF, cover letter DOCX, WHY.md. Never save to the skill folder or unrelated current workspace.
 - **Versioning:** if the target folder already exists, do NOT overwrite it and do NOT ask the user. Automatically append `_V1`, `_V2`, `_V3`, etc. to the folder name, incrementing until a free name is found. Example: `Resume_SeniorBackendDeveloper_Fullscript/` exists → use `Resume_SeniorBackendDeveloper_Fullscript_V1/`. If `_V1` also exists, try `_V2`, and so on. Apply the same version suffix to all 5 output files inside the folder.
 
 ### Location
@@ -292,8 +307,16 @@ Structure (do not change):
 - Keep on one clean line. If it must split: Line 1 = degree title, Line 2 = ` | Institution | Start - End`.
 - Never let dates wrap without the ` | ` separator.
 
+### Section Headers — Never Orphan (HARD RULE, ALL SECTIONS)
+A section header (e.g., `EDUCATION & CERTIFICATIONS`, `PROJECTS`, `SKILLS`, `PROFESSIONAL REFERENCES`, `EXPERIENCE`) must NEVER appear at the bottom of one page while its content starts on the next page. This is a hard rule and applies to every section in every build.
+
+Implementation requirements:
+- **PDF (ReportLab):** wrap the section header flowables together with the first content block in a single `KeepTogether(...)`. For small sections (Education & Certifications, Skills, References, short Projects/Summary lists), wrap the header + entire content in one `KeepTogether(...)`.
+- **DOCX (python-docx):** set `w:keepNext` on the section header paragraph AND on the section's horizontal rule paragraph. For small sections that must stay fully together (Education & Certifications, Skills, References), cascade `w:keepNext` on every paragraph in the section EXCEPT the last one — this pins the entire block to one page.
+- **Verification step:** after rendering, extract text per page and confirm no section header is the last visible line of a page. If it is, the build fails QA and must be regenerated.
+
 ### Education & Certifications — Never Split
-Entire section must stay on one page. If it doesn't fit, move whole section to page 2 or reduce certs.
+Entire section must stay on one page (header + degree + institution + every cert). If it doesn't fit, move the whole section to the next page or reduce certs. The section header must move with the content — never leave the header orphaned on the previous page.
 
 ### Projects
 - 2-4 most relevant to JD. Order: newest to oldest.
@@ -497,6 +520,7 @@ Header rule absent (unless requested):     [ PASS / FAIL ]
 Contact info in body (not header/footer):  [ PASS / FAIL ]
 Employer blocks split:                     [ YES / NO    ]
 Education & Certifications split:          [ YES / NO    ]
+Section headers never orphan from content: [ PASS / FAIL ]
 Certificates relevant to JD:              [ PASS / FAIL ]
 Required JD technologies with evidence:    [ PASS / FAIL ]
 Primary tech traceable in bullets:         [ PASS / FAIL / N/A ]
@@ -511,7 +535,7 @@ Market rules applied (Canada/US):          [ PASS / FAIL ]
 
 ## DOCX TECHNICAL RULES
 
-- **No double bullets.** Plain paragraphs with `•` prepended. Never ListBullet style alongside manual bullets.
+- **Real Word bullets only.** Inject a numbering definition into `numbering.xml` and bind every bullet paragraph to it with `<w:numPr>` (numId + ilvl=0). The bullet glyph is rendered by Word from the numbering; the paragraph text must NOT start with `•`, `•\t`, or any inline bullet character. Inline-prefix bullets look AI-built — never ship them. Use `lvlText="•"`, Symbol font, `<w:ind w:left="360" w:hanging="220"/>`. Never mix native list bullets with manual `•` (causes double bullets). In PDF, use ReportLab's `Paragraph(text, style, bulletText="•")` with `leftIndent` / `bulletIndent` set on the style.
 - **Single line spacing (1.0)** on all paragraphs. Never Word default 1.15 or 1.5.
 - **No empty paragraphs.** Never insert `doc.add_paragraph()` for spacing. Use spaceAfter/spaceBefore only.
 - **Spacing:** 0pt spaceBefore, 0-2pt spaceAfter on normal paragraphs. Bullets: 2pt spaceAfter.
@@ -542,8 +566,8 @@ Avoid: "leveraged" | "utilized" | "in order to" | starting every bullet with "Us
 
 ## HOW TO UPDATE THIS SKILL
 
-- Rules: `/update-rules` — Claude shows proposed change and confirms before saving
-- Personal data: `/update-info` — paste new data, Claude merges into MY_INFO.md
+- Rules: `/update-rules` — Codex shows proposed change and confirms before saving
+- Personal data: `/update-info` — paste new data, Codex merges into MY_INFO.md
 - New cert: `/add-cert` | New job: `/add-experience` | New project: `/add-project`
 - New style: `/add-style`
 - Manual edit: edit any file directly — keep the `---` YAML frontmatter at top intact
