@@ -1,8 +1,17 @@
-# Resume Builder — Claude AI Skill
+# Resume Builder — AI Skill (Claude + Codex)
 
 > Built by [Saleh Abbaas](https://linkedin.com/in/salehabbaas) · [github.com/salehabbaas](https://github.com/salehabbaas)
 
-An advanced AI-powered resume builder skill for [Claude (Cowork / Claude Code)](https://claude.ai). Paste a job description, answer two questions, and get a professionally designed, ATS-scored, two-page resume with a matching cover letter — in both PDF and DOCX — in under a minute.
+An advanced AI-powered resume builder skill. Paste a job description, answer two questions, and get a professionally designed, ATS-scored, two-page resume with a matching cover letter, in both PDF and DOCX, in under a minute.
+
+**Two versions — pick the one for your platform:**
+
+| Version | Folder | For |
+|---|---|---|
+| **Claude** | [`claude/`](claude/) | Claude Code, Cowork, claude.ai. Uses Claude's native skill file resolution. |
+| **Codex** | [`codex/`](codex/) | Codex / OpenAI agents. Carries the absolute-path portability rules Codex needs, plus `AGENTS.md` and an `agents/` definition. |
+
+The rules, styles, and workflow are identical in both — only the platform setup (file resolution, invocation, output paths) differs. Use whichever fits your tool.
 
 ---
 
@@ -25,97 +34,64 @@ Most resume tools are glorified templates. This skill is a full reasoning engine
 
 ```
 resume-builder/
-├── SKILL.md           # All rules, commands, and workflows — the brain
-├── RESUME_STYLES.md   # 6 named visual styles with colors, fonts, layout specs
-├── MY_INFO.md         # Your personal data (gitignored — never committed)
-├── FEEDBACK.md        # Learning log from past builds (gitignored — kept local)
-├── agents/            # Agent definitions (e.g. openai.yaml) for cross-platform use
-├── README.md          # This file
-├── AGENTS.md          # Project instructions for Codex / Cowork imports
-└── .gitignore         # Excludes MY_INFO.md, FEEDBACK.md, built files, output folders
+├── claude/                    # Claude version — import this for Claude Code / Cowork
+│   ├── SKILL.md               # All rules, commands, and workflows — the brain
+│   ├── RESUME_STYLES.md       # 6 named visual styles with colors, fonts, layout specs
+│   ├── MY_INFO.template.md    # Public template — copy to MY_INFO.md and fill in
+│   ├── MY_INFO.md             # Your personal data (gitignored — never committed)
+│   └── FEEDBACK.md            # Learning log from past builds (gitignored — kept local)
+├── codex/                     # Codex version — use this for Codex / OpenAI agents
+│   ├── SKILL.md               # Same brain, with absolute-path portability rules
+│   ├── RESUME_STYLES.md
+│   ├── MY_INFO.template.md
+│   ├── AGENTS.md              # Project instructions for Codex
+│   └── agents/openai.yaml     # Agent definition
+├── README.md                  # This file
+└── .gitignore                 # Excludes MY_INFO.md, FEEDBACK.md, built files, output folders
 ```
 
-The core files work together. `SKILL.md` orchestrates everything. `MY_INFO.md` holds your data. `RESUME_STYLES.md` controls the design. `FEEDBACK.md` accumulates lessons from past builds and is read at the start of every session.
+In each version, `SKILL.md` orchestrates everything, `MY_INFO.md` holds your data, `RESUME_STYLES.md` controls the design, and `FEEDBACK.md` accumulates lessons that are read at the start of every session.
 
 ---
 
 ## Installation
 
-### Option 1 — Import as a Claude Skill (Cowork / Claude Code)
+### Claude (Claude Code / Cowork / claude.ai)
 
 1. Clone or download this repo
-2. Create your own `MY_INFO.md` using the template below
-3. Zip the skill files flat at the root — no subfolder:
+2. In `claude/`, copy `MY_INFO.template.md` to `MY_INFO.md` and fill in your data
+3. Zip the `claude/` skill files flat at the root — no subfolder:
    ```bash
-   zip -r resume-builder.zip SKILL.md RESUME_STYLES.md MY_INFO.md agents/
+   cd claude
+   zip -r ../resume-builder.zip SKILL.md RESUME_STYLES.md MY_INFO.md
    ```
 4. In Claude: **Settings → Skills → Import Skill** → upload the zip
 5. The skill appears as `resume-builder` and is ready
 
-> The zip must contain `SKILL.md` at the root level. Do not nest inside a subfolder. `MY_INFO.md` is your private data — include it in your own zip, but it is gitignored and never committed to the repo.
+> The zip must contain `SKILL.md` at the root level. `MY_INFO.md` is your private data — include it in your own zip, but it is gitignored and never committed to the repo.
 
-### Option 2 — Use directly in any Claude session
+**Or use it directly in any Claude session:** paste the contents of `claude/SKILL.md`, your `MY_INFO.md`, and `claude/RESUME_STYLES.md` into a conversation and start with `/resume`.
 
-Paste the contents of `SKILL.md`, `MY_INFO.md`, and `RESUME_STYLES.md` into a Claude conversation and start with `/resume`.
+### Codex / OpenAI agents
+
+1. Clone or download this repo
+2. In `codex/`, copy `MY_INFO.template.md` to `MY_INFO.md` and fill in your data
+3. Set `SKILL_DIR` (the `codex/` folder) and `RESUMES_DIR` (your output folder) in `codex/AGENTS.md`
+4. Invoke the skill with `$resume-builder` and start with `/resume`
+
+> The Codex version reads/writes by absolute path. See `codex/AGENTS.md` and the CODEX PORTABILITY section of `codex/SKILL.md` for setup.
 
 ---
 
 ## MY_INFO.md Template
 
-Create this file with your own data. It is gitignored and never committed.
+Each version ships a ready-to-use template at `claude/MY_INFO.template.md` and `codex/MY_INFO.template.md`. Copy it to `MY_INFO.md` in the same folder and fill in your data — it is gitignored and never committed.
 
-```markdown
----
-name: resume-my-info
-description: Personal data for [Your Name] resume building.
----
-
-# My Info — [Your Name]
-
-## IDENTITY
-- **Full Name:** [Your Full Name]
-- **Phone:** [Your Phone]
-- **Email:** [Your Email]
-- **LinkedIn:** linkedin.com/in/[yourhandle]
-- **GitHub:** github.com/[yourhandle]
-- **Location:** [Your City, Province/State, Country]
-- **Resume city rule:** [Optional — e.g. "Always match the JD's city in the contact header." Omit to always use your home Location.]
-- **Max experience claim:** [Optional — e.g. "5+ years (hard cap)". The skill never exceeds this in any Summary or cover letter.]
-- **Languages:** [e.g. English (Native) | French (Conversational)]
-
-## EDUCATION
-**[Degree Title]**
-[Institution], [City]
-[Start Year] - [End Year]
-
-## CERTIFICATES
-- [Certificate Name] | [Issuer] | [Month Year]
-- ...
-
-## WORK EXPERIENCE
-
-### Job 1 — [Company Name]
-**Display title on resume:** [Job Title]
-**Dates:** [Mon Year] - [Mon Year]
-**Location:** [City, Country]
-**Always include:** Yes
-
-**Raw facts:**
-- [Fact 1 — what you built, what happened, numbers]
-- [Fact 2]
-- ...
-
-**Key tools:** [Tool1] | [Tool2] | [Tool3]
-
-### Job 2 — [Company Name]
-...
-
-## PROJECTS
-| Project | Best for |
-|---|---|
-| [Project Name] | [Role type, technologies] |
-...
-```
+Key optional fields the template documents:
+- **Resume city rule** — match the JD's city in the contact header instead of your home city
+- **Max experience claim** — a hard cap on the years-of-experience the skill will ever claim
+- **Output directory** — absolute path where generated resume folders are written (Claude version)
+- Per-job **Always include** / **Include when** — control which jobs appear based on the JD
 
 ---
 
@@ -219,8 +195,8 @@ Market rules applied (Canada/US):          [ PASS / FAIL ]
 |---|---|
 | PDF generation | [ReportLab](https://www.reportlab.com/) (Python) |
 | DOCX generation | [python-docx](https://python-docx.readthedocs.io/) (Python) |
-| Skill orchestration | [Claude AI](https://claude.ai) (Anthropic) |
-| Interactive flow | Claude Elicitation (Cowork / Claude Code) |
+| Skill orchestration | [Claude](https://claude.ai) (Claude Code / Cowork) or [Codex](https://openai.com) / OpenAI agents |
+| Interactive flow | Native interactive controls on either platform, with chat fallback |
 
 ---
 
