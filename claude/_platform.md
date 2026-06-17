@@ -13,7 +13,7 @@ This is a standard Claude skill. Resolve all persistent files **relative to this
 
 **Invocation:** the user triggers a build by asking for a resume or by using a `/resume`-style intent. Treat the commands below as task intents, not required slash-command installs.
 
-**Output location:** read `Output directory` from `MY_INFO.md → IDENTITY` if set, and write every generated `Resume_[JobTitle]_[Company]/` folder there. If no `Output directory` is set, create the folder under a `resumes/` directory in the current workspace. Never write generated output into the skill folder itself.
+**Output location:** read `Output directory` from `MY_INFO.md → IDENTITY` if set (otherwise use a `resumes/` directory in the current workspace) — this is the base. Inside it, always nest by month then company: `<base>/<YYYY-MM>/<Company>/Resume_[JobTitle]_[Company]/` (see Identity & Files → Output path for the full rule). Never write generated output into the skill folder itself.
 
 If the surface provides interactive controls, use them for setup choices. Otherwise ask the same questions concisely in chat and continue from the answers.
 

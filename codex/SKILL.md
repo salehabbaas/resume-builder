@@ -23,7 +23,7 @@ Codex resolves files by absolute path, not relative to the working directory. **
 
 Then, every session:
 - Read and update `SKILL_DIR/MY_INFO.md`, `SKILL_DIR/RESUME_STYLES.md`, and `SKILL_DIR/FEEDBACK.md` when applicable.
-- Write every generated `Resume_[JobTitle]_[Company]/` output folder under `RESUMES_DIR`, including when Codex is launched from another project. Never write output into `SKILL_DIR`.
+- Write generated output under `RESUMES_DIR`, always nested by month then company: `RESUMES_DIR/<YYYY-MM>/<Company>/Resume_[JobTitle]_[Company]/` (see Identity & Files → Output path for the full rule), including when Codex is launched from another project. Never write output into `SKILL_DIR`.
 
 Copy `MY_INFO.template.md` to `MY_INFO.md` and fill it in before the first build. `MY_INFO.md` and `FEEDBACK.md` are gitignored and never committed.
 
@@ -210,10 +210,17 @@ Read `Target market` from MY_INFO.md. Apply the correct rules for every build.
 ## CORE RULES
 
 ### Identity & Files
-- **Name:** read from `MY_INFO.md → IDENTITY.Full Name`. First letter of each word capitalized. Never ALL CAPS.
+- **Name:** read from `MY_INFO.md → IDENTITY.Full Name` (or the per-company identity match — see Identity selection below). First letter of each word capitalized. Never ALL CAPS.
 - **File name:** `Resume_[FirstName][LastName]_[JobTitle]_[Company].pdf` and `.docx`
-- **Output folder:** always create `Resume_[JobTitle]_[Company]/` in the configured output directory (see the file-location section at the top of this skill). Place all 5 files inside: resume PDF, resume DOCX, cover letter PDF, cover letter DOCX, WHY.md. Never save to the skill folder or unrelated current workspace.
-- **Versioning:** if the target folder already exists, do NOT overwrite it and do NOT ask the user. Automatically append `_V1`, `_V2`, `_V3`, etc. to the folder name, incrementing until a free name is found. Example: `Resume_SeniorBackendDeveloper_Fullscript/` exists → use `Resume_SeniorBackendDeveloper_Fullscript_V1/`. If `_V1` also exists, try `_V2`, and so on. Apply the same version suffix to all 5 output files inside the folder.
+- **Output path (REQUIRED nesting):** build this tree inside the configured output directory (see the file-location section at the top of this skill):
+  ```
+  <output dir>/<YYYY-MM>/<Company>/Resume_[JobTitle]_[Company]/
+  ```
+  - `<YYYY-MM>` = the month the resume is built, e.g. `2026-06`. Reuse the month folder for every resume built that month.
+  - `<Company>` = the JD's company name, cleaned for the filesystem (letters, numbers, spaces → keep; strip `/ \ : * ? " < > |`). Reuse the same company folder for every resume for that company.
+  - The innermost `Resume_[JobTitle]_[Company]/` folder holds all 5 files: resume PDF, resume DOCX, cover letter PDF, cover letter DOCX, WHY.md.
+  - Create any missing parent folders. Never save to the skill folder or an unrelated current workspace.
+- **Versioning:** only the innermost `Resume_[JobTitle]_[Company]/` folder is versioned. If it already exists, do NOT overwrite and do NOT ask — append `_V1`, `_V2`, `_V3`, … incrementing until a free name is found (the `<YYYY-MM>/<Company>/` parents are reused, never versioned). Apply the same version suffix to all 5 output files inside. Example: `2026-06/Fullscript/Resume_SeniorBackendDeveloper_Fullscript/` exists → use `2026-06/Fullscript/Resume_SeniorBackendDeveloper_Fullscript_V1/`.
 
 ### Location
 - Read all locations from `MY_INFO.md`. Never hardcode locations in this skill.
@@ -378,7 +385,7 @@ Available upon request.
 
 ### Output
 - All 5 files: resume PDF + DOCX, cover letter PDF + DOCX, WHY.md
-- All inside `Resume_[JobTitle]_[Company]/` (or `_V1`, `_V2`, etc. if folder already exists)
+- All inside `<output dir>/<YYYY-MM>/<Company>/Resume_[JobTitle]_[Company]/` (innermost folder gets `_V1`, `_V2`, etc. if it already exists). Save the raw JD text here too.
 - ATS report unless Just Generate
 - **Feedback prompt after every build** (see FEEDBACK section below)
 

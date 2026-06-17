@@ -14,7 +14,7 @@ Codex resolves files by absolute path, not relative to the working directory. **
 
 Then, every session:
 - Read and update `SKILL_DIR/MY_INFO.md`, `SKILL_DIR/RESUME_STYLES.md`, and `SKILL_DIR/FEEDBACK.md` when applicable.
-- Write every generated `Resume_[JobTitle]_[Company]/` output folder under `RESUMES_DIR`, including when Codex is launched from another project. Never write output into `SKILL_DIR`.
+- Write generated output under `RESUMES_DIR`, always nested by month then company: `RESUMES_DIR/<YYYY-MM>/<Company>/Resume_[JobTitle]_[Company]/` (see Identity & Files → Output path for the full rule), including when Codex is launched from another project. Never write output into `SKILL_DIR`.
 
 Copy `MY_INFO.template.md` to `MY_INFO.md` and fill it in before the first build. `MY_INFO.md` and `FEEDBACK.md` are gitignored and never committed.
 
