@@ -24,7 +24,7 @@ Most resume tools are glorified templates. This skill is a full reasoning engine
 - **Employer block integrity** — no employer block ever splits across pages, guaranteed
 - **ATS scoring with risk level** — full score, matched keywords, missing keywords, suggested fixes, and a short recommendation
 - **Interactive Elicitation flow** — three structured choices (build mode, output mode, bullet style) before generation
-- **QA report on every build** — 14-point validation checklist returned before delivery; if anything fails, it regenerates automatically
+- **QA report on every build** — 19-point validation checklist (incl. a humanization pass) returned before delivery; if anything fails, it regenerates automatically
 - **WHY.md decision doc** — every build ships a written rationale: which employers, certs, and projects were included and why
 - **Two output formats** — PDF (via ReportLab) and DOCX (via python-docx), always both, always matching
 
@@ -162,7 +162,7 @@ Six named styles. Choose with `--style=<flag>`:
 
 ## What Gets Validated Before Delivery
 
-Every build returns a 14-point QA report. Nothing is delivered until all pass:
+Every build returns a 19-point QA report. Nothing is delivered until all pass:
 
 ```
 Resume PDF page count: 2 pages             [ PASS / FAIL ]
@@ -175,6 +175,11 @@ Section headers never orphan from content: [ PASS / FAIL ]
 Certificates relevant to JD:               [ PASS / FAIL ]
 Required JD technologies with evidence:    [ PASS / FAIL ]
 Primary tech traceable in bullets:         [ PASS / FAIL / N/A ]
+Experience bullets follow 4-part structure:[ PASS / FAIL ]
+Humanization pass done (no AI tells/spaces):[ PASS / FAIL ]
+Real list bullets (no inline glyphs):      [ PASS / FAIL ]
+Identity (name + email) matches company:   [ PASS / FAIL ]
+Output nested <YYYY-MM>/<Company>/...:      [ PASS / FAIL ]
 No em dashes in any file:                  [ PASS / FAIL ]
 All 5 output files created:                [ PASS / FAIL ]
 Section order correct:                     [ PASS / FAIL ]

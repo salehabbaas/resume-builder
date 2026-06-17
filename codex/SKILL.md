@@ -117,8 +117,9 @@ Use interactive controls whenever the platform supports them. Skip questions mad
 - **Just Generate** — build resume and cover letter, skip ATS unless asked later
 
 ### Step 3 — Bullet style
-- **FullPoints** — complete bullets, multi-line allowed when needed
-- **OnePoints** — every bullet one line: "Used A to do B for C" where C = reason or impact
+Both styles use the required experience-bullet structure (what I did → how → effect → business impact, written as natural prose — see Experience). They differ only in length:
+- **FullPoints** — 1.5-2 lines per bullet, all four elements stated
+- **OnePoints** — one line per bullet, compressed so it still implies what + how + impact
 
 Only ask more questions if the user chose StepResume, or if a genuine ambiguity cannot be resolved from MY_INFO.md or the JD.
 
@@ -249,11 +250,17 @@ Structure (do not change):
 - **Display title:** read from `MY_INFO.md → Display title on resume` per employer. Never change or infer from JD. If `Display title note` says "do not change," treat as locked.
 - **Inclusion:** read each employer's `Always include` and `Include when` from MY_INFO.md. Include if `Always include: Yes` OR if `Include when` matches the JD. Never include by habit.
 - Order: newest to oldest.
-- Bullets: action + what was built or done + why it mattered or what it enabled.
+- **Bullet structure (REQUIRED — every experience bullet):** each bullet must carry all four elements, in this order, woven into natural prose:
+  1. **What I did** — the action / what was built or delivered
+  2. **How I did it** — the approach, system, or technology used
+  3. **What the effect was** — the immediate technical or operational result
+  4. **What the business impact was** — why it mattered to the org (users served, time/cost saved, revenue/risk, capability unlocked)
+  Write it as one flowing sentence (or two short ones), NOT as four labelled clauses or a rigid template. Vary the construction across bullets so no two read the same. Example: "Connected five hospitals to the regional Epic platform by building HL7 mapping pipelines in Rhapsody, cutting onboarding from weeks to days and letting clinicians share records across the alliance." (what → how → effect → impact).
+  - If a real business impact genuinely isn't known, close with a truthful operational outcome rather than inventing a metric.
 - Real numbers only — from MY_INFO.md. Never invent metrics.
 - **Collaboration:** include at least one bullet reflecting cross-team work or delivery leadership where it genuinely occurred.
 - **Primary language:** whatever the JD requires, reflect it naturally where it genuinely exists in MY_INFO.md. Ask user if uncertain. Never fabricate.
-- FullPoints: 1.5-2 lines per bullet. OnePoints: one line, "Used A to do B for C."
+- Length: FullPoints — 1.5-2 lines per bullet, all four elements present. OnePoints — compress to one line that still implies what + how + impact.
 - Bullet spacing: 2pt spaceAfter minimum.
 
 ### Skills Line Per Job
@@ -314,6 +321,17 @@ Available upon request.
 - Every bullet reads like a real professional wrote it. No AI-template patterns.
 - Vary sentence length and openers. No two bullets start the same way in a row.
 - Rewrite anything mechanical before finalizing.
+
+### Humanization Pass — REQUIRED before delivery
+After generating the resume and cover letter, re-read every produced file end to end and fix anything that reads as machine-written. This pass runs on every build, for both PDF and DOCX.
+
+- **Spacing hygiene:** no double spaces, no space before punctuation (`word ,` → `word,`), no trailing spaces at end of lines, exactly one space after each comma. Collapse any accidental double blank lines.
+- **Real bullets only:** every list item is a true list bullet (native `numPr` in DOCX, `bulletText` in PDF — see DOCX TECHNICAL RULES). No inline `•`, `-`, or `*` typed into paragraph text.
+- **No AI tells:** remove "leveraged", "utilized", "in order to", "spearheaded a paradigm", "passionate about", "results-driven", "dynamic professional", "seamlessly", "robust solutions", and any clause that states the obvious. No em dashes anywhere; no semicolons as separators.
+- **Punctuation consistency:** bullets end consistently (all with a period, or all without — pick one and apply it throughout). Straight quotes/apostrophes, not curly, unless the style calls for curly everywhere.
+- **Natural variation:** vary openers and sentence shape; avoid every bullet following an identical rhythm. The four-element structure must read as prose, never as four labelled clauses.
+- **Truthfulness:** every claim traces to MY_INFO.md. No invented numbers, tools, or titles.
+- If anything fails, fix it and re-render before running the FINAL QA REPORT.
 
 ### Years of Experience
 - Read the `Max experience claim` cap from `MY_INFO.md → IDENTITY`. Never exceed it on any resume or cover letter, even for senior-level postings.
@@ -493,6 +511,11 @@ Section headers never orphan from content: [ PASS / FAIL ]
 Certificates relevant to JD:              [ PASS / FAIL ]
 Required JD technologies with evidence:    [ PASS / FAIL ]
 Primary tech traceable in bullets:         [ PASS / FAIL / N/A ]
+Experience bullets follow 4-part structure:[ PASS / FAIL ]
+Humanization pass done (no AI tells/spaces):[ PASS / FAIL ]
+Real list bullets (no inline glyphs):      [ PASS / FAIL ]
+Identity (name + email) matches company:   [ PASS / FAIL ]
+Output nested <YYYY-MM>/<Company>/...:      [ PASS / FAIL ]
 No em dashes in any file:                  [ PASS / FAIL ]
 All 5 output files created:               [ PASS / FAIL ]
 Section order correct:                     [ PASS / FAIL ]
