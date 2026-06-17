@@ -21,8 +21,16 @@ description: Personal data file for resume building. Contains identity, all work
 - **Location:** [Your City, Province/State, Country]
 - **Resume city rule:** [Optional — e.g. "Always match the JD's city in the contact header." Omit this line to always use your home Location above.]
 - **Max experience claim:** [Optional — e.g. "5+ years (hard cap)". The skill never claims more than this in any Summary or cover letter. Omit for no cap.]
-- **Output directory:** [Optional — absolute path where generated resume folders should be written. If omitted, output goes to a `resumes/` folder in the current workspace.]
+- **Output directory:** [Optional — absolute path where generated resume folders should be written. Output is nested as <dir>/<YYYY-MM>/<Company>/Resume_.../ . If omitted, a `resumes/` folder in the current workspace is used.]
 - **Languages:** [e.g. English (Native) | French (Conversational)]
+
+### Identity selection (name + email per company) — optional
+[Optional. Use different name/email depending on the JD's company. Delete this block to always use Full Name + Email above.]
+
+| Match | Name | Email |
+|---|---|---|
+| **Apple** | [Name to use for Apple] | [email-for-apple@example.com] |
+| **Default** (all other companies) | [Your Name] | [your-default@example.com] |
 
 ---
 

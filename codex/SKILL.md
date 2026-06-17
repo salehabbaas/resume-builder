@@ -157,8 +157,13 @@ Read `Target market` from MY_INFO.md. Apply the correct rules for every build.
 ## CORE RULES
 
 ### Identity & Files
-- **Name:** read from `MY_INFO.md → IDENTITY.Full Name` (or the per-company identity match — see Identity selection below). First letter of each word capitalized. Never ALL CAPS.
-- **File name:** `Resume_[FirstName][LastName]_[JobTitle]_[Company].pdf` and `.docx`
+- **Identity selection (name + email per company):** if `MY_INFO.md` defines `Identity selection` rules, pick the name and email by matching the JD's company:
+  1. If a company-specific override matches the JD company (case-insensitive, substring match — e.g. "Apple"), use that override's name and email.
+  2. Otherwise use the `Default` identity (name + email).
+  Apply the chosen name and email everywhere: resume header, cover letter header and signature, and the file-name author field. Resolve automatically — never ask. If no `Identity selection` block exists, fall back to `IDENTITY.Full Name` and `IDENTITY.Email`.
+- **Name:** the name resolved by Identity selection (or `IDENTITY.Full Name`). First letter of each word capitalized. Never ALL CAPS.
+- **Email:** the email resolved by Identity selection (or `IDENTITY.Email`). Use it on both the resume and the cover letter.
+- **File name:** `Resume_[FirstName][LastName]_[JobTitle]_[Company].pdf` and `.docx`. Use the resolved name for `[FirstName][LastName]` (e.g. `Sal`, or `SalehAbbaas` when the resolved name is the full name).
 - **Output path (REQUIRED nesting):** build this tree inside the configured output directory (see the file-location section at the top of this skill):
   ```
   <output dir>/<YYYY-MM>/<Company>/Resume_[JobTitle]_[Company]/
