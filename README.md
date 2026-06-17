@@ -34,23 +34,32 @@ Most resume tools are glorified templates. This skill is a full reasoning engine
 
 ```
 resume-builder/
+├── shared/                    # Single source of truth (edit these)
+│   ├── FRONTMATTER.md         # Skill frontmatter (name + description)
+│   ├── CORE.md                # All rules, commands, ATS scoring, QA — shared by both
+│   └── RESUME_STYLES.md       # 6 named visual styles with colors, fonts, layout specs
 ├── claude/                    # Claude version — import this for Claude Code / Cowork
-│   ├── SKILL.md               # All rules, commands, and workflows — the brain
-│   ├── RESUME_STYLES.md       # 6 named visual styles with colors, fonts, layout specs
+│   ├── _platform.md           # Claude-only header: intro + FILE LOCATIONS
+│   ├── SKILL.md               # GENERATED = FRONTMATTER + _platform + CORE
+│   ├── RESUME_STYLES.md       # GENERATED (copied from shared/)
 │   ├── MY_INFO.template.md    # Public template — copy to MY_INFO.md and fill in
 │   ├── MY_INFO.md             # Your personal data (gitignored — never committed)
 │   └── FEEDBACK.md            # Learning log from past builds (gitignored — kept local)
 ├── codex/                     # Codex version — use this for Codex / OpenAI agents
-│   ├── SKILL.md               # Same brain, with absolute-path portability rules
-│   ├── RESUME_STYLES.md
+│   ├── _platform.md           # Codex-only header: intro + CODEX PORTABILITY
+│   ├── SKILL.md               # GENERATED (absolute-path portability rules)
+│   ├── RESUME_STYLES.md       # GENERATED (copied from shared/)
 │   ├── MY_INFO.template.md
 │   ├── AGENTS.md              # Project instructions for Codex
 │   └── agents/openai.yaml     # Agent definition
+├── build.sh                   # Regenerates both SKILL.md from shared sources
 ├── README.md                  # This file
 └── .gitignore                 # Excludes MY_INFO.md, FEEDBACK.md, built files, output folders
 ```
 
 In each version, `SKILL.md` orchestrates everything, `MY_INFO.md` holds your data, `RESUME_STYLES.md` controls the design, and `FEEDBACK.md` accumulates lessons that are read at the start of every session.
+
+> **Each `SKILL.md` is generated** by `build.sh` from `shared/FRONTMATTER.md` + the version's `_platform.md` + `shared/CORE.md`. The committed `SKILL.md` files are complete and importable as-is — you only need `build.sh` if you change the rules. See [Editing the rules](#editing-the-rules).
 
 ---
 
@@ -186,6 +195,26 @@ Market rules applied (Canada/US):          [ PASS / FAIL ]
 - **Languages line only when JD requires it.** Otherwise omit.
 - **ATS scoring** with matched, missing, risk level, and recommendation — unless user chose Just Generate.
 - **All 5 files always:** resume PDF + DOCX, cover letter PDF + DOCX, and WHY.md decision doc.
+
+---
+
+## Editing the rules
+
+Each version's `SKILL.md` and `RESUME_STYLES.md` are **generated** — never edit them by hand. Change the source, then rebuild:
+
+- **A shared rule** (applies to both versions) → edit `shared/CORE.md`
+- **A visual style** → edit `shared/RESUME_STYLES.md`
+- **The skill name/description** → edit `shared/FRONTMATTER.md`
+- **Something platform-specific** (intro, file paths, invocation) → edit `claude/_platform.md` or `codex/_platform.md`
+
+Then regenerate and verify:
+
+```bash
+./build.sh           # rewrites claude/SKILL.md and codex/SKILL.md
+./build.sh --check    # CI-friendly: exits non-zero if a committed SKILL.md is stale
+```
+
+This keeps the ~95% shared rule set in one place while each version stays a complete, importable bundle.
 
 ---
 

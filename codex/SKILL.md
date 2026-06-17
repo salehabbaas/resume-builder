@@ -3,6 +3,10 @@ name: resume-builder
 description: AI-powered resume builder. Builds tailored, ATS-optimized resumes and cover letters from a job description. Supports Canada and US markets, 6 visual styles, interactive setup, old resume parsing, ATS scoring, WHY.md decision docs, and a feedback learning system. Load alongside MY_INFO.md and RESUME_STYLES.md before every session. Use when the user wants to build, update, or analyze a resume.
 ---
 
+<!-- GENERATED FILE — do not edit this SKILL.md directly. It is assembled by build.sh from
+     shared/FRONTMATTER.md + <platform>/_platform.md + shared/CORE.md.
+     Edit those source files instead, then run ./build.sh to regenerate. -->
+
 # Resume Builder
 
 An advanced AI resume-building skill for **Codex / OpenAI agents**. Drop in your data via `MY_INFO.md`, paste a job description, and get a fully tailored, ATS-scored, two-page resume with cover letter in both PDF and DOCX, built to pass modern ATS systems in Canada and the US.
@@ -95,7 +99,7 @@ Write all collected data into MY_INFO.md using the standard format. Confirm with
 
 1. Read `MY_INFO.md`, `RESUME_STYLES.md`, and `FEEDBACK.md` (if present).
 2. If no job description is provided: *"Please paste the full job description."*
-3. When a JD is provided, save the exact JD text into `RESUMES_DIR` before generating anything.
+3. When a JD is provided, save the exact JD text into the output directory (see the file-location section at the top of this skill) before generating anything.
 4. Run JD Analysis, then open the interactive build flow.
 
 ---
@@ -123,7 +127,7 @@ Write all collected data into MY_INFO.md using the standard format. Confirm with
 | `/add-project` | Add a project |
 | `/add-style` | Add a new visual style to RESUME_STYLES.md |
 | `/update-info` | Update any section of MY_INFO.md |
-| `/update-rules` | Propose a rule change — Codex shows diff and confirms before saving |
+| `/update-rules` | Propose a rule change — the skill shows a diff and confirms before saving |
 | `/show-styles` | List all 6 visual styles |
 | `/show-certs` | List certs with role selection rules |
 | `/show-projects` | List projects with best-fit role tags |
@@ -208,7 +212,7 @@ Read `Target market` from MY_INFO.md. Apply the correct rules for every build.
 ### Identity & Files
 - **Name:** read from `MY_INFO.md → IDENTITY.Full Name`. First letter of each word capitalized. Never ALL CAPS.
 - **File name:** `Resume_[FirstName][LastName]_[JobTitle]_[Company].pdf` and `.docx`
-- **Output folder:** always create `Resume_[JobTitle]_[Company]/` under `RESUMES_DIR`, as defined in CODEX PORTABILITY. Place all 5 files inside: resume PDF, resume DOCX, cover letter PDF, cover letter DOCX, WHY.md. Never save to the skill folder or unrelated current workspace.
+- **Output folder:** always create `Resume_[JobTitle]_[Company]/` in the configured output directory (see the file-location section at the top of this skill). Place all 5 files inside: resume PDF, resume DOCX, cover letter PDF, cover letter DOCX, WHY.md. Never save to the skill folder or unrelated current workspace.
 - **Versioning:** if the target folder already exists, do NOT overwrite it and do NOT ask the user. Automatically append `_V1`, `_V2`, `_V3`, etc. to the folder name, incrementing until a free name is found. Example: `Resume_SeniorBackendDeveloper_Fullscript/` exists → use `Resume_SeniorBackendDeveloper_Fullscript_V1/`. If `_V1` also exists, try `_V2`, and so on. Apply the same version suffix to all 5 output files inside the folder.
 
 ### Location
@@ -572,8 +576,8 @@ Avoid: "leveraged" | "utilized" | "in order to" | starting every bullet with "Us
 
 ## HOW TO UPDATE THIS SKILL
 
-- Rules: `/update-rules` — Codex shows proposed change and confirms before saving
-- Personal data: `/update-info` — paste new data, Codex merges into MY_INFO.md
+- Rules: `/update-rules` — the skill shows the proposed change and confirms before saving
+- Personal data: `/update-info` — paste new data, the skill merges into MY_INFO.md
 - New cert: `/add-cert` | New job: `/add-experience` | New project: `/add-project`
 - New style: `/add-style`
 - Manual edit: edit any file directly — keep the `---` YAML frontmatter at top intact

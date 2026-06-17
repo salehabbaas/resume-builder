@@ -1,35 +1,3 @@
----
-name: resume-builder
-description: AI-powered resume builder. Builds tailored, ATS-optimized resumes and cover letters from a job description. Supports Canada and US markets, 6 visual styles, interactive setup, old resume parsing, ATS scoring, WHY.md decision docs, and a feedback learning system. Load alongside MY_INFO.md and RESUME_STYLES.md before every session. Use when the user wants to build, update, or analyze a resume.
----
-
-<!-- GENERATED FILE — do not edit this SKILL.md directly. It is assembled by build.sh from
-     shared/FRONTMATTER.md + <platform>/_platform.md + shared/CORE.md.
-     Edit those source files instead, then run ./build.sh to regenerate. -->
-
-# Resume Builder
-
-An advanced AI resume-building skill for **Claude (Claude Code / Cowork / claude.ai)**. Drop in your data via `MY_INFO.md`, paste a job description, and get a fully tailored, ATS-scored, two-page resume with cover letter in both PDF and DOCX, built to pass modern ATS systems in Canada and the US.
-
-> **Codex / OpenAI user?** Use the `codex/` version of this skill instead — it carries the absolute-path portability rules Codex needs. This `claude/` version is tuned for Claude's skill model.
-
-## FILE LOCATIONS
-
-This is a standard Claude skill. Resolve all persistent files **relative to this skill's own directory** (the folder that holds this `SKILL.md`):
-- `MY_INFO.md` — your personal data: identity, experience, certificates, projects. Copy `MY_INFO.template.md` to `MY_INFO.md` and fill it in. It is gitignored and never committed.
-- `RESUME_STYLES.md` — 6 visual styles with fonts, colors, layout specs.
-- `FEEDBACK.md` — past lessons from previous builds (if it exists). Gitignored.
-
-**Invocation:** the user triggers a build by asking for a resume or by using a `/resume`-style intent. Treat the commands below as task intents, not required slash-command installs.
-
-**Output location:** read `Output directory` from `MY_INFO.md → IDENTITY` if set, and write every generated `Resume_[JobTitle]_[Company]/` folder there. If no `Output directory` is set, create the folder under a `resumes/` directory in the current workspace. Never write generated output into the skill folder itself.
-
-If the surface provides interactive controls, use them for setup choices. Otherwise ask the same questions concisely in chat and continue from the answers.
-
-At the start of every session read `MY_INFO.md`, `RESUME_STYLES.md`, and `FEEDBACK.md` (if present) before generating anything.
-
----
-
 ## FIRST-RUN SETUP
 
 **Trigger:** Run this flow when `MY_INFO.md` is empty, missing, or when the user explicitly says they are setting up for the first time.
