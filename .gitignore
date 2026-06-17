@@ -1,25 +1,27 @@
-# macOS
-.DS_Store
+# Personal data — never commit
+MY_INFO.md
+FEEDBACK.md
 
-# Local archives and generated bundles
+# Built resume outputs
+*.pdf
+*.docx
 *.zip
 
-# Private resume history and exports
-old/
-
-# Personal profile data for the resume skill
-# Keep this file locally and use Resume_builder/skills/MY_INFO.template.md
-# as the public-safe structure.
-Resume_builder/skills/MY_INFO.md
-
-# Generated resume output folders inside the project
-Resume_builder/Resume_*/
-
-# Common temporary files
-*.tmp
-*.bak
-~$*
 # Generated resume folders
 Resume_*/
-ZUHAIR_INFO.md
-Job Descriptions.txt
+
+# Old archives
+old/
+
+# OS and editor junk
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo

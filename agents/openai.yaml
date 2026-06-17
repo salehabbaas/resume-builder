@@ -1,0 +1,4 @@
+interface:
+  display_name: "Resume Builder"
+  short_description: "Build ATS-ready resumes and cover letters"
+  default_prompt: "Use $resume-builder to tailor my resume and cover letter to this job description."
